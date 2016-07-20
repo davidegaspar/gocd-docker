@@ -1,0 +1,29 @@
+version: '2'
+services:
+  server:
+    image: gocd/gocd-server
+    container_name: server
+    ports:
+      - 8153:8153
+    volumes:
+      - config:/etc/go
+      - lib:/var/lib/go-server
+      - logs:/var/log/go-server
+
+  agent-nodejs:
+    image: local/gocd-agent-nodejs
+    links:
+      - server
+    volumes:
+      - home:/var/go
+      - /var/run/docker.sock:/var/run/docker.sock
+
+volumes:
+  lib:
+    external: true
+  config:
+    external: true
+  logs:
+    external: true
+  home:
+    external: true
